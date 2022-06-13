@@ -1,6 +1,10 @@
 # CliContains (cc)
 
 ## Installation
+### Binary
+Grab a binary from the github releases page, and drop it in /usr/local/bin or ~/.local/bin/ (make sure both of these are in $PATH)
+
+### From Source
 Run these commands to install CliContains
 ```bash
 cd cc # Move into directory
