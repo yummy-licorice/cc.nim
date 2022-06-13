@@ -1,26 +1,41 @@
-import os, strutils, terminal, osproc
+import argparse, osproc, strutils
 
-let help_message* = """Help Message Coming Soon"""
+var p = newParser:
+  flag("-s", "--script")
+  arg("command")
+  arg("substring")
 
-if os.paramCount() < 1:
-  stdout.styledWriteLine(fgRed, "ERROR: ", fgWhite, "You need too have at least 2 arguments\nUsage: cc <command> <string-to-search-for>")
-  quit 1
-elif os.paramStr(1) == "--help" or os.paramStr(1) == "-h":
-  echo help_message
-  quit 0
-elif os.paramCount() < 2:
-  stdout.styledWriteLine(fgRed, "ERROR: ", fgWhite, "You need too have at least 2 arguments\nUsage: cc <command> <string-to-search-for>")
-  quit 1
+try:
+  let opts = p.parse()
+  
+  let exCmd = execCmdEx(opts.command)
+  let searchString: string = opts.substring
+  
+  if exCmd[1] == 1:
+    quit 1
+  
+  if opts.script:
+    if searchString in exCmd[0]:
+      echo "true"
+    else: 
+      echo "false"
+  else:
+    if searchString in exCmd[0]:
+      echo "The output of command '" & opts.command & "' contains the string '" & opts.substring & "'"
+    else: 
+      echo "The output of command '" & opts.command & "' does not contain the string '" & opts.substring & "'"
+except:
+  let helpMsg = """
+Usage:
+  cc [flags: optional] [command] [string-to-search-for]
+A simple command line utility to check if the output of a command contains a substring
+Flags:
+  -h, --help                    print this help message
+  -s, --script                  only return 'true' or 'false' (for usage in shell scripts)
+  """
+  echo helpMsg
+      
 
-let command = os.paramStr(1)
-let search_string = os.paramStr(2) 
-let execCmd = osproc.execCmdEx(command)
 
-if execCmd[1] == 1:
-  stdout.styledWriteLine(fgRed, "ERROR: ", fgWhite, "The entered command returned with errors")
-  quit 1
-elif search_string.strip() in execCmd[0]:
-  echo "true"
-else: 
-  echo "false"
+
 
