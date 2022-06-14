@@ -6,19 +6,16 @@ var p = newParser:
   arg("substring")
 
 try:
-  let opts = p.parse()
-  
-  let exCmd = execCmdEx(opts.command)
-  let searchString: string = opts.substring
+  let 
+    opts = p.parse()
+    exCmd = execCmdEx(opts.command)
+    searchString: string = opts.substring
   
   if exCmd[1] == 1:
-    quit 1
+    quit(1)
   
   if opts.script:
-    if searchString in exCmd[0]:
-      echo "true"
-    else: 
-      echo "false"
+    echo $searchString in exCmd[0]
   else:
     if searchString in exCmd[0]:
       echo "The output of command '" & opts.command & "' contains the string '" & opts.substring & "'"
@@ -33,7 +30,7 @@ Flags:
   -h, --help                    print this help message
   -s, --script                  only return 'true' or 'false' (for usage in shell scripts)
   """
-  echo helpMsg
+  echo helpMsg 
       
 
 
